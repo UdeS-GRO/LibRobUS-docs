@@ -16,30 +16,33 @@ void setup()
 
 void loop()
 {
-  if( Serial2.available() )
+  while(1)
   {
-    crecu=Serial2.read();     // lit le ID-12
-    switch( crecu )
+    if( Serial2.available() )
     {
-      case 0x02:
-        // START OF TRANSMIT
-        AX_BuzzerON();
-        i=0;
-        incoming=1;
-        break;
-      case 0x03:
-        // END OF TRANSMIT
-        AX_BuzzerOFF();
-        incoming=0;
-        // Affiche le code recu sans valider le checksum
-        for( i=0 ; i<10 ; i++ )
-          Serial.print(id_tag[i]);
-        Serial.println("");
-        break;
-      default:
-        if( incoming )
-          id_tag[i++] = crecu;
-        break;
+      crecu=Serial2.read();     // lit le ID-12
+      switch( crecu )
+      {
+        case 0x02:
+          // START OF TRANSMIT
+          AX_BuzzerON();
+          i=0;
+          incoming=1;
+          break;
+        case 0x03:
+          // END OF TRANSMIT
+          AX_BuzzerOFF();
+          incoming=0;
+          // Affiche le code recu sans valider le checksum
+          for( i=0 ; i<10 ; i++ )
+            Serial.print(id_tag[i]);
+          Serial.println("");
+          break;
+        default:
+          if( incoming )
+            id_tag[i++] = crecu;
+          break;
+      }
     }
   }
 }
